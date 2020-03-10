@@ -1,5 +1,6 @@
 open Lili_term
 open Lili_parsing
+open Lili_rules
 open Sexplib
 
 let rec parse_atom_type inp = inp --> begin
@@ -22,6 +23,7 @@ let rec parse_term s =
   | Atom s -> Var s
   | List [Atom "lambda"; List [Atom binding]; expr] ->
     Lambda (parse_binding binding, parse_term expr)
+  | List [Atom "rule"; Atom r] -> get_rule r
   | List [a; b] ->
     Application (parse_term a, parse_term b)
   | _ -> failwith ("parsing error " ^ (to_string_hum s))

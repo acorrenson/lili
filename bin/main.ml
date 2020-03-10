@@ -9,7 +9,7 @@ let () =
   flush_all ();
   let term = 
     read_line ()
-    |> read_term
+    |> Sexp.of_string
     |> parse_term
   in
   match infer term ["y", Type_atom "Q"] with

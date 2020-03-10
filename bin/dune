@@ -1,4 +1,11 @@
 (executable
  (public_name lili)
  (name main)
- (libraries lili))
+ (libraries lili)
+ (modules main))
+
+(executable
+ (public_name lili)
+ (name debug)
+ (libraries lili)
+ (modules debug))

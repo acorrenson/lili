@@ -15,8 +15,10 @@ type term =
 let rec pretty_type t =
   match t with
   | Type_atom s -> s
+  | Type_arrow (Type_atom a, b) ->
+    Printf.sprintf "%s -> %s" a (pretty_type b)
   | Type_arrow (a, b) ->
-    Printf.sprintf "%s -> %s" (pretty_type a) (pretty_type b)
+    Printf.sprintf "(%s) -> %s" (pretty_type a) (pretty_type b)
 
 let pretty_binding (Bind (x, t)) =
   Printf.sprintf "%s:%s" x (pretty_type t)

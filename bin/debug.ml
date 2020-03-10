@@ -8,7 +8,7 @@ let () =
   let cg = "\x1B[32m" in
   let cy = "\x1B[33m" in
   let cn = "\x1B[0m" in
-  let p, q = Sexp.input_sexp (open_in "./test.scm") |> parse_script in
+  let p, q = Sexp.input_sexp (open_in "./test2.scm") |> parse_script in
   Printf.printf "Target : %s%s%s\n" cy (pretty_type p) cn;
   Printf.printf "Proof  : %s%s%s\n" cy (pretty_term q) cn;
   let t = infer q [] in

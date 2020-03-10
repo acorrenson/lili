@@ -56,6 +56,16 @@ let pretty_unifier u =
   List.map (fun (s, a) -> s ^ ":" ^ (pretty_type a) ^ " ") u
   |> List.fold_left (^) ""
 
+let rec apply_unifier u t =
+  match t with
+  | Type_atom x ->
+    begin
+      match List.assoc_opt x u with
+      | Some y -> y
+      | None -> t
+    end
+  | Type_arrow (a, b) ->
+    Type_arrow (apply_unifier u a, apply_unifier u b)
 
 let _ =
   let t1 = Type_arrow (Type_atom "A", Type_atom "B") |> make_type_var in

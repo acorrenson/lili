@@ -1,5 +1,6 @@
 open Lili_term
 open Option
+open Lili_unification
 
 type type_env = (string * type_info) list
 
@@ -18,6 +19,11 @@ let rec infer t env =
     let* tt2 = infer t2 env in
     begin
       match tt1, tt2 with
-      | Type_arrow (a, b), c when a = c -> Some (b)
+      | Type_arrow (a, b), c ->
+        begin 
+          match unify [a |> make_type_var, c] with
+          | Some (u) -> Some(apply_unifier u b)
+          | None -> None
+        end
       | _ -> None
     end

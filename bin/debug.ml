@@ -14,10 +14,10 @@ let () =
   Printf.printf "Proof  :\n%s%s%s\n" cy (pretty_term q) cn;
   let t = infer q [] in
   match t with
-  | Some tt -> 
-    begin  
+  | Some tt ->
+    begin
       match unify [(make_type_var tt), p] with
-      | Some (u) -> 
+      | Some (u) ->
         Printf.printf "status : %sprooved%s using unifier : %s%s%s\n" 
           cg cn cy (pretty_unifier u) cn;
       | None ->

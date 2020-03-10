@@ -21,5 +21,3 @@ let rec infer t env =
       | Type_arrow (a, b), c when a = c -> Some (b)
       | _ -> None
     end
-
-

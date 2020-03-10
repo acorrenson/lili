@@ -21,14 +21,20 @@ let rec pretty_type t =
     Printf.sprintf "(%s) -> %s" (pretty_type a) (pretty_type b)
 
 let pretty_binding (Bind (x, t)) =
-  Printf.sprintf "%s:%s" x (pretty_type t)
+  Printf.sprintf "%s:(%s)" x (pretty_type t)
 
-let rec pretty_term t =
-  match t with
-  | Lambda (b, t') ->
-    Printf.sprintf "(ƛ%s.%s)"
-      (pretty_binding b) (pretty_term t')
-  | Application (a, b) ->
-    Printf.sprintf "(%s %s)"
-      (pretty_term a) (pretty_term b)
-  | Var x -> x
+let pretty_term t =
+  let rec rec_pretty_term t p n =
+    match t with
+    | Lambda (b, t') ->
+      Printf.sprintf "%sƛ%s.\n%s%s"
+        (String.make p ' ') (pretty_binding b) (String.make (n+2+p) ' ') (rec_pretty_term t' 0 (n+2+p))
+    | Application (Var s, b) ->
+      Printf.sprintf "(%s %s)"
+        s (rec_pretty_term b 0 (n+2))
+    | Application (a, b) ->
+      Printf.sprintf "(%s\n%s)"
+        (rec_pretty_term a 0 (n+2)) (rec_pretty_term b 1 (n+2))
+    | Var x -> x
+  in
+  rec_pretty_term t 0 0

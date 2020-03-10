@@ -1,11 +1,9 @@
 (executable
  (public_name lili_repl)
- (name repl)
  (libraries lili)
- (modules repl))
+ (modules lili_repl))
 
 (executable
- (public_name lili)
- (name lili)
+ (public_name lili_run)
  (libraries lili)
- (modules lili))
+ (modules lili_run))

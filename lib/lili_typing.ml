@@ -17,6 +17,9 @@ let rec infer t env =
   | Application (t1, t2) ->
     let* tt1 = infer t1 env in
     let* tt2 = infer t2 env in
+    (* match tt1, tt2 with
+       | Type_arrow (a, b), c when a = c -> Some(b)
+       | _ -> None *)
     begin
       match tt1, tt2 with
       | Type_arrow (a, b), c ->

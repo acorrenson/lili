@@ -32,20 +32,20 @@ let unify l =
     match l with
     (* Decompose *)
     | (Var_arrow (a, b), Type_arrow (a', b'))::rest ->
-      print_endline "decompose";
+      (* print_endline "decompose"; *)
       step ((a, a')::(b, b')::rest) sol
     (* Eliminate *)
     | (Var_atom a, b)::rest ->
-      print_endline "eliminate";
+      (* print_endline "eliminate"; *)
       step (substitute_all a b rest) ((a, b)::sol)
     (* Clash_2 *)
     | (Var_arrow _, Type_atom _)::_ ->
-      print_endline "clash_2";
+      (* print_endline "clash_2"; *)
       None
     | (Var_fixed x, y)::rest ->
       if (x = y) then step rest sol
       else (
-        print_endline "clash_2";
+        (* print_endline "clash_2"; *)
         None
       )
     | [] -> Some (sol)

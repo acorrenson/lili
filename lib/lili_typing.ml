@@ -6,6 +6,8 @@ type type_env = (string * type_info) list
 
 let (let*) = Option.bind
 
+let new_type n = Printf.sprintf "'%c" (char_of_int (65 + n))
+
 let rec infer t env =
   match t with
   | Lambda (Bind (x, tx), y) ->

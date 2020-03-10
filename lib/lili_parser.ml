@@ -15,6 +15,8 @@ and parse_type inp = inp --> begin
   end
 and parse_annotation inp = inp --> begin
     bind <$> stringlitl <*> ((String.make 1) <$> char ':') *> ~~parse_type
+    <|>
+    ((fun x -> bind x (Type_atom "?")) <$> stringlitl)
   end
 
 let rec parse_term s =

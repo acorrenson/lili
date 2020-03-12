@@ -12,7 +12,7 @@ let () =
   let p, q = Sexp.input_sexp (open_in "./examples/test4.scm") |> parse_script in
   Printf.printf "Target : %s%s%s\n" cy (pretty_type p) cn;
   Printf.printf "Proof  :\n%s%s%s\n" cy (pretty_term q) cn;
-  let t = infer q [] in
+  let t = type_check q [] in
   match t with
   | Some tt ->
     begin

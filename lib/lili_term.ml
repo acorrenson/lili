@@ -38,3 +38,34 @@ let pretty_term t =
     | Var x -> x
   in
   rec_pretty_term t 0 0
+
+let rec pretty_term_inline t =
+  match t with
+  | Lambda (b, t') ->
+    Printf.sprintf "ƛ%s.%s"
+      (pretty_binding b) (pretty_term_inline t')
+  | Application (Var s, b) ->
+    Printf.sprintf "(%s %s)" s (pretty_term_inline b)
+  | Application (a, b) ->
+    Printf.sprintf "(%s %s)"
+      (pretty_term_inline a) (pretty_term_inline b)
+  | Var x -> x
+
+let rec subst t x y =
+  match t with
+  | Lambda (Bind (x', _), _) when x' = x -> t
+  | Lambda (Bind (x', tx), e) ->
+    Lambda (Bind (x', tx), subst e x y)
+  | Application (e1, e2) ->
+    Application (subst e1 x y, subst e2 x y)
+  | Var x' when x = x' -> y
+  | Var x -> Var x
+
+let rec untyped_beta_reduction t =
+  match t with
+  | Application (Lambda (Bind (x, _), m), e) ->
+    let q = untyped_beta_reduction m in
+    subst q x e
+  | Application (p, q) ->
+    untyped_beta_reduction (Application (untyped_beta_reduction p, q))
+  | _ -> t

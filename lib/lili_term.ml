@@ -27,7 +27,7 @@ let pretty_term t =
   let rec rec_pretty_term t p n =
     match t with
     | Lambda (b, t') ->
-      Printf.sprintf "%sƛ%s.\n%s%s"
+      Printf.sprintf "%sλ%s.\n%s%s"
         (String.make p ' ') (pretty_binding b) (String.make (n+2+p) ' ') (rec_pretty_term t' 0 (n+2+p))
     | Application (Var s, b) ->
       Printf.sprintf "(%s %s)"

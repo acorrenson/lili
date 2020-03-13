@@ -11,7 +11,7 @@ let () =
     |> Sexp.of_string
     |> parse_term
   in
-  match infer term [] with
+  match type_check term [] with
   | Some t ->
     Printf.printf "term = %s : (%s)\n" (pretty_term term) (pretty_type t)
   | None -> failwith "type error !"

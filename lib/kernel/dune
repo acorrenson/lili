@@ -1,5 +1,4 @@
 (library
  (name kernel)
- (public_name lili.kernel)
  (preprocess
   (pps ppx_variants_conv)))

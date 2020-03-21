@@ -6,12 +6,8 @@ open Sexplib
 let () =
   print_string "$> ";
   flush_all ();
-  let term = 
-    read_line ()
-    |> Sexp.of_string
-    |> parse_term
-  in
+  let term = read_line () |> Sexp.of_string |> parse_term in
   match type_check term [] with
   | Some t ->
-    Printf.printf "term = %s : (%s)\n" (pretty_term term) (pretty_type t)
+      Printf.printf "term = %s : (%s)\n" (pretty_term term) (pretty_type t)
   | None -> failwith "type error !"

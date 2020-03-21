@@ -1,10 +1,9 @@
 open Term
+
 type thm = Thm of ptype
 
 let rule_modus_ponens (Thm t1) (Thm t2) =
-  match t1, t2 with
-  | T_arrow (a, b), c when a = c -> Some (Thm b)
-  | _ -> None
+  match (t1, t2) with T_arrow (a, b), c when a = c -> Some (Thm b) | _ -> None
 
 let axiom_K =
   Thm (ge "A" @@ ge "B" @@ ge "A")

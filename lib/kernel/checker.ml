@@ -3,6 +3,8 @@ open Option
 
 type type_env = (string * ptype) list
 
+let new_env = []
+
 let ( let* ) = Option.bind
 
 let rec type_check t env =

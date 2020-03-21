@@ -1,5 +1,0 @@
-(library
- (name lili)
- (libraries sexplib)
- (preprocess 
-  (pps ppx_sexp_conv ppx_variants_conv)))

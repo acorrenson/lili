@@ -1,0 +1,4 @@
+(library
+ (name kernel)
+ (preprocess
+  (pps ppx_variants_conv)))

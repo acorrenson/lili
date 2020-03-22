@@ -64,7 +64,7 @@ Axiom axiom_a : A
 Axiom axiom_a_impl_b : A -> B
 
 (* We prove B *)
-Proof b_is_true : B
+Prop b_is_true : B
 Proof: (axiom_a_impl_b axiom_a)
 ```
 

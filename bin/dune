@@ -1,9 +1,4 @@
 (executable
- (public_name lili_repl)
- (libraries kernel language)
- (modules lili_repl))
-
-(executable
  (public_name lili_run)
  (libraries kernel language)
  (modules lili_run))

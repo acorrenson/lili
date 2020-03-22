@@ -77,18 +77,5 @@ Proof: (axiom_a_impl_b axiom_a)
 The current state of Lili may appear a little bit disappointing : we can only manipulate tautologies, there is no way to define theorems and combine them etc... Of course such features are soon to come ! I currently work on many interesting ones :
 
 + A clean **unification algorithm** to introduce universal quantifiers and generic propositions
-+ A *type inference* algorithm (thus, explicitly typed lambda-term will not be required anymore)
++ A **type inference** algorithm (thus, explicitly typed lambda-term will not be required anymore)
 + An **interactive interface** to build proofs without explicitly writing terms but only by calling inference rules in sequence.
-
-<!-- **Axioms** :
-  + `A -> B -> A` (**K**)
-  + `(A -> B -> C) -> (A -> B) -> A -> C` (**S**)
-  + `A -> A` (**I**)
-
-**Rules** :
-  + Modus Ponens only (if one can derive `A` and `A -> B` from context, so `B` can be derived)
-
-**Notes** :
-  + From axioms **K** and **S** we can derive a third axiom **I** : `A -> A` -->
-
-*I'd like to thank my friend Lison for all the amazing discussions we had. I named this project after her*

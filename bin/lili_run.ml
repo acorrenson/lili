@@ -25,7 +25,7 @@ let process_entity e =
 
 
 let () =
-  let pres = read_all (open_in "./examples/test.scm") |> do_parse parse_script in
+  let pres = read_all (open_in "./examples/test.lili") |> do_parse parse_script in
   match pres with
   | None -> failwith "Parse error"
   | Some elist -> List.iter process_entity elist

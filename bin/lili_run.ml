@@ -8,24 +8,44 @@ let cg = "\x1B[32m"
 let cy = "\x1B[33m"
 let cn = "\x1B[0m"
 
-let process_entity e =
+let process_entity env e =
   match e with
-  | Axiom p -> Printf.printf "assuming : %s%s%s\n" cy (pretty_type p) cn
-  | Target (target, proof) ->
-    Printf.printf "New target : %s%s%s\n" cy (pretty_type target) cn;
-    Printf.printf "Proof      :\n%s%s%s\n" cy (pretty_term proof) cn;
-    match type_check proof new_env with
-    | Some tt when tt = target ->
+  | Axiom (name, ax) ->
+    begin
+      match extend_by_axiom name ax env with
+      | Ok env' -> 
+        Printf.printf "assuming : %s%s%s\n" cy (pretty_type ax) cn;
+        env'
+      | Error err ->
+        match err with
+        | Overwrite ->
+          Printf.printf "error : Overwriting axiom %s%s%s !\n" cr name cn;
+          exit 3
+        | _ -> assert false
+    end
+  | Target ((name, target), proof) ->
+    Printf.printf "New target : [%s] %s%s%s\n" name cy (pretty_type target) cn;
+    Printf.printf "Proof :\n%s%s%s\n" cy (pretty_term proof) cn;
+    match extend_env name target proof env with
+    | Ok env' ->
       Printf.printf "%sProoved%s !\n" cg cn;
-    | Some tt ->
-      Printf.printf "status : %sincompatible types%s. Proof term has type %s but was expected of type %s\n"
-        cr cn (pretty_type tt) (pretty_type target);
-    | None -> Printf.printf "status : proof term %sisn't typable%s\n" cr cn
-
+      env'
+    | Error err ->
+      match err with
+      | Bad_type t ->
+        Printf.printf "error : %sincompatible types%s. Proof term has type %s but was expected of type %s\n"
+          cr cn (pretty_type t) (pretty_type target);
+        exit 1
+      | Not_typable ->
+        Printf.printf "error : proof term %sisn't typable%s\n" cr cn;
+        exit 2
+      | Overwrite ->
+        Printf.printf "error : Overwriting statement %s%s%s\n" cr name cn;
+        exit 3
 
 
 let () =
   let pres = read_all (open_in "./examples/test.lili") |> do_parse parse_script in
   match pres with
   | None -> failwith "Parse error"
-  | Some elist -> List.iter process_entity elist
+  | Some elist -> ignore (List.fold_left process_entity new_env elist)

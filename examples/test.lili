@@ -1,7 +1,14 @@
-Prop : (A -> B) -> A -> B
+Prop easy: (A -> B) -> A -> B
 Proof :
   [x : A -> B] =>
     [y : A] => (x y)
 
-Prop : (A -> B) -> A -> B
-Proof : [x : A -> B] => [y : A] => (x y)
+Prop easy_clone: (A -> B) -> A -> B
+Proof : easy
+
+Axiom axiom_e : E
+Axiom axiom_f : F
+
+Prop e_impl_f : E -> F
+Proof:
+  [x : E] => axiom_f

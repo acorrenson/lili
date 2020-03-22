@@ -1,0 +1,25 @@
+{
+    "name": "lili-lang",
+    "displayName": "lili-lang",
+    "description": "Support for lili proof checker",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.43.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "lili",
+            "aliases": ["lili", "lili"],
+            "extensions": [".lili"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "lili",
+            "scopeName": "source.lili",
+            "path": "./syntaxes/lili.tmLanguage.json"
+        }]
+    }
+}

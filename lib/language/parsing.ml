@@ -19,18 +19,18 @@ let pure x = P (fun input -> Some (x, input))
 let ( <$> ) f (P p) =
   P
     (fun input ->
-      match p input with None -> None | Some (x, next) -> Some (f x, next))
+       match p input with None -> None | Some (x, next) -> Some (f x, next))
 
 (** Apply *)
 let ( <*> ) (P p1) (P p2) =
   P
     (fun input ->
-      match p1 input with
-      | None -> None
-      | Some (f, input') -> (
-          match p2 input' with
-          | Some (x, input'') -> Some (f x, input'')
-          | None -> None ))
+       match p1 input with
+       | None -> None
+       | Some (f, input') -> (
+           match p2 input' with
+           | Some (x, input'') -> Some (f x, input'')
+           | None -> None ))
 
 (** Apply to the right *)
 let ( *> ) p1 p2 = (fun _ y -> y) <$> p1 <*> p2
@@ -68,10 +68,10 @@ let some p = P (fun inp -> List.cons <$> p <*> many p <-- inp)
 let check pred =
   P
     (fun input ->
-      match input with
-      | s when s <> "" && pred s.[0] ->
-          Some (s.[0], String.(sub s 1 (length s - 1)))
-      | _ -> None)
+       match input with
+       | s when s <> "" && pred s.[0] ->
+         Some (s.[0], String.(sub s 1 (length s - 1)))
+       | _ -> None)
 
 (** Alias for constructor [P] *)
 let ( ~~ ) f = P f
@@ -109,6 +109,20 @@ let binop cons c v = cons <$> v <*> spaced (char c) *> v
     @param  v       any parser *)
 let cbinop cons cc v = cons <$> v <*> spaced cc *> v
 
+let explode s =
+  let rec step s acc =
+    match s with
+    | "" -> acc
+    | s -> step (String.sub s 1 (String.length s - 1)) (s.[0]::acc)
+  in
+  step s []
+
+let literal s =
+  let s' = explode s in
+  let f acc p = List.cons <$> p <*> acc in
+  List.fold_left f (pure []) (List.map char s')
+
+
 (** Parser for optionnal white spaces *)
 let blanks = many (char ' ' <|> char '\t' <|> char '\n')
 
@@ -123,8 +137,10 @@ let cparenthized copar v ccpar = spaced copar *> v <* spaced ccpar
 
 let stringify l = List.map (String.make 1) l |> List.fold_left ( ^ ) ""
 
-let stringlitl = stringify <$> some (one_in "abcdefghijklmnopqrstuvwxyz")
+let stringlitl = stringify <$> some (one_in "abcdefghijklmnopqrstuvwxyz_")
 
-let stringlitu = stringify <$> some (one_in "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+let stringlitu = stringify <$> some (one_in "ABCDEFGHIJKLMNOPQRSTUVWXYZ_")
 
 let arrow = spaced ((fun _ _ -> "->") <$> char '-' <*> char '>')
+
+let trimed p = blanks *> p <* blanks

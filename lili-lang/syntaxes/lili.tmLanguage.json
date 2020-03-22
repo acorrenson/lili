@@ -1,0 +1,15 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "lili",
+  "patterns": [
+    {
+      "name": "keyword.control.lili",
+      "match": "\\b(Proof|Prop|Axiom)\\b"
+    },
+    {
+      "name": "keyword.operator.lili",
+      "match": "=>"
+    }
+  ],
+  "scopeName": "source.lili"
+}

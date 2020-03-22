@@ -1,3 +1,7 @@
 (library
  (name language)
- (libraries kernel sexplib))
+ (public_name lili.language)
+ (libraries kernel)
+ (modules parser parsing)
+ (preprocess
+  (pps ppx_variants_conv)))

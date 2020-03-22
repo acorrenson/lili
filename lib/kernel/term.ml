@@ -31,7 +31,7 @@ let rec pretty_type t =
   | T_arrow (T_atom a, b) -> Printf.sprintf "%s -> %s" a (pretty_type b)
   | T_arrow (T_gen a, b) -> Printf.sprintf "'%s -> %s" a (pretty_type b)
   | T_arrow (a, b) ->
-      Printf.sprintf "(%s) -> %s" (pretty_type a) (pretty_type b)
+    Printf.sprintf "(%s) -> %s" (pretty_type a) (pretty_type b)
 
 (** Stringify a term (with indentation)
     @param t  A value of type {!term} *)
@@ -39,15 +39,15 @@ let pretty_term t =
   let rec rec_pretty_term t p n =
     match t with
     | Lam (Bind (x, tx), t') ->
-        Printf.sprintf "%sλ%s:(%s).\n%s%s" (String.make p ' ') x
-          (pretty_type tx)
-          (String.make (n + 2 + p) ' ')
-          (rec_pretty_term t' 0 (n + 2 + p))
+      Printf.sprintf "%sλ%s:(%s).\n%s%s" (String.make p ' ') x
+        (pretty_type tx)
+        (String.make (n + 2 + p) ' ')
+        (rec_pretty_term t' 0 (n + 2 + p))
     | App (Var s, b) -> Printf.sprintf "(%s %s)" s (rec_pretty_term b 0 (n + 2))
     | App (a, b) ->
-        Printf.sprintf "(%s\n%s)"
-          (rec_pretty_term a 0 (n + 2))
-          (rec_pretty_term b 1 (n + 2))
+      Printf.sprintf "(%s\n%s)"
+        (rec_pretty_term a 0 (n + 2))
+        (rec_pretty_term b 1 (n + 2))
     | Var x -> x
   in
   rec_pretty_term t 0 0
@@ -57,8 +57,8 @@ let pretty_term t =
 let rec pretty_term_inline t =
   match t with
   | Lam (Bind (x, tx), t') ->
-      Printf.sprintf "λ%s:(%s).%s" x (pretty_type tx) (pretty_term_inline t')
+    Printf.sprintf "λ%s:(%s).%s" x (pretty_type tx) (pretty_term_inline t')
   | App (Var s, b) -> Printf.sprintf "(%s %s)" s (pretty_term_inline b)
   | App (a, b) ->
-      Printf.sprintf "(%s %s)" (pretty_term_inline a) (pretty_term_inline b)
+    Printf.sprintf "(%s %s)" (pretty_term_inline a) (pretty_term_inline b)
   | Var x -> x

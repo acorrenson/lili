@@ -1,6 +1,6 @@
 (library
  (name kernel)
  (public_name lili.kernel)
- (modules term checker)
+ (modules term checker unification)
  (preprocess
   (pps ppx_variants_conv)))

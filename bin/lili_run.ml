@@ -39,9 +39,12 @@ let process_entity env e =
       | Not_typable ->
         Printf.printf "error : proof term %sisn't typable%s\n" cr cn;
         exit 2
+      | Unification ->
+        Printf.printf "error : proof and target %sare'nt unifiable%s\n" cr cn;
+        exit 3
       | Overwrite ->
         Printf.printf "error : Overwriting statement %s%s%s\n" cr name cn;
-        exit 3
+        exit 4
 
 
 let () =

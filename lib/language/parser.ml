@@ -22,7 +22,7 @@ let parse_type =
     inp --> ((t_and <$> ~~patom <*> spaced (char '/' *> char '\\') *> ~~pand) <|> ~~patom)
 
   and patom inp =
-    inp --> (t_atom <$> stringlitu <|> parenthesized '(' ~~ptype ')')
+    inp --> ((t_atom <$> stringlitu) <|> (t_gen <$> char '\'' *> stringlitu) <|> (parenthesized '(' ~~ptype ')'))
   in
   ~~ptype
 

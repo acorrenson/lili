@@ -1,5 +1,5 @@
 
-Axiom case : (A -> (B \/ A)) -> (B -> (B \/ A)) -> (A \/ B -> (B \/ A))
+Axiom case : (A -> 'P) -> (B -> 'P) -> (A \/ B -> 'P)
 Axiom or_a : A -> (B \/ A)
 Axiom or_b : B -> (B \/ A)
 

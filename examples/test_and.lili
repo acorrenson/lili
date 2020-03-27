@@ -1,0 +1,8 @@
+
+Axiom fst : A /\ B -> A
+Axiom snd : A /\ B -> B
+Axiom and : B -> A -> B /\ A
+
+Prop and_commut : A /\ B -> B /\ A
+Proof :
+  [ x : A /\ B ] => ((and (snd x)) (fst x))

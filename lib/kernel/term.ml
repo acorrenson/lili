@@ -1,7 +1,12 @@
 (** {2 Lambda Terms and Types } *)
 
 (** Propositions/types *)
-type ptype = T_gen of string | T_atom of string | T_arrow of ptype * ptype
+type ptype = 
+  | T_gen of string
+  | T_atom of string
+  | T_and of ptype * ptype
+  | T_or of ptype * ptype
+  | T_arrow of ptype * ptype
 [@@deriving variants]
 
 type binding = Bind of string * ptype [@@deriving variants]
@@ -32,6 +37,10 @@ let rec pretty_type t =
   | T_arrow (T_gen a, b) -> Printf.sprintf "'%s -> %s" a (pretty_type b)
   | T_arrow (a, b) ->
     Printf.sprintf "(%s) -> %s" (pretty_type a) (pretty_type b)
+  | T_and (a, b) ->
+    Printf.sprintf "(%s /\\ %s)" (pretty_type a) (pretty_type b)
+  | T_or (a, b) ->
+    Printf.sprintf "(%s \\/ %s)" (pretty_type a) (pretty_type b)
 
 (** Stringify a term (with indentation)
     @param t  A value of type {!term} *)

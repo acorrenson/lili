@@ -9,16 +9,22 @@ type entity =
 let named_prop a b = (a, b)
 
 let parse_type =
-  let rec atom_type inp =
+  let rec ptype inp =
+    inp --> (~~pimpl <|> ~~por)
+
+  and pimpl inp =
+    inp --> (t_arrow <$> ~~por <*> (spaced arrow) *> ~~ptype)
+
+  and por inp =
+    inp --> ((t_or <$> ~~pand <*> spaced (char '\\' *> char '/') *> ~~por) <|> ~~pand)
+
+  and pand inp =
+    inp --> ((t_and <$> ~~patom <*> spaced (char '/' *> char '\\') *> ~~pand) <|> ~~patom)
+
+  and patom inp =
     inp --> (t_atom <$> stringlitu <|> parenthesized '(' ~~ptype ')')
-
-  and arrow_type inp =
-    inp --> (t_arrow <$> ~~atom_type <*> (spaced arrow) *> ~~ptype)
-
-  and ptype inp =
-    inp --> (~~arrow_type <|> ~~atom_type)
-  in ~~ptype
-
+  in
+  ~~ptype
 
 let parse_prop_stmt =
   named_prop <$> literal "Prop" *> (spaced stringlitl) <*> spaced (char ':') *> parse_type

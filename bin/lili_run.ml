@@ -45,7 +45,7 @@ let process_entity env e =
 
 
 let () =
-  let pres = read_all (open_in "./examples/test.lili") |> do_parse parse_script in
+  let pres = read_all (open_in "./examples/test_or.lili") |> do_parse parse_script in
   match pres with
   | None -> failwith "Parse error"
   | Some elist -> ignore (List.fold_left process_entity new_env elist)

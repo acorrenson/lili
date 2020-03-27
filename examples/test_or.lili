@@ -1,0 +1,8 @@
+
+Axiom case : (A -> (B \/ A)) -> (B -> (B \/ A)) -> (A \/ B -> (B \/ A))
+Axiom or_a : A -> (B \/ A)
+Axiom or_b : B -> (B \/ A)
+
+Prop or_commut : A \/ B -> B \/ A
+Proof :
+  [ x : A \/ B ] => (((case or_a) or_b) x)

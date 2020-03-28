@@ -10,7 +10,15 @@ type error =
   | Overwrite
   | Unification
 
-let new_env = []
+let new_env = [
+  "case", (ge "A" @@ ge "P") @@ ((ge "B" @@ ge "P") @@ ((T_or (ge "A", ge "B")) @@ ge "P"));
+  "or_l", (ge "A" @@ (T_or (ge "A", ge "B")));
+  "or_l", (ge "B" @@ (T_or (ge "A", ge "B")));
+
+  "fst", ((T_and (ge "A", ge "B")) @@ ge "A");
+  "snd", ((T_and (ge "A", ge "B")) @@ ge "B");
+  "and", (ge "A" @@ (ge "B" @@ (T_and (ge "A", ge "B"))));
+]
 
 let ( let* ) = Option.bind
 

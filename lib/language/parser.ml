@@ -32,6 +32,8 @@ let parse_prop_stmt =
 
 let parse_bind = bind <$> stringlitl <*> spaced (char ':') *> parse_type
 
+let parse_comment = trimed (many (trimed (char '/' *> char '/' *> many (check ((<>) '\n')) *> char '\n')))
+
 (* 
   term ::=
     | var
@@ -63,7 +65,8 @@ let parse_axiom =
   |> trimed
 
 let parse_script =
-  many ((target <$> parse_prop_stmt <*> blanks *> parse_proof_stmt) <|> parse_axiom)
+  let entity = (target <$> parse_prop_stmt <*> blanks *> parse_proof_stmt) <|> parse_axiom in
+  many ((parse_comment *> entity) <|> entity)
 
 
 let read_all f =

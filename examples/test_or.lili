@@ -1,0 +1,8 @@
+
+Axiom case : ('A -> 'P) -> ('B -> 'P) -> ('A \/ 'B -> 'P)
+Axiom or_l : 'A -> ('A \/ 'B)
+Axiom or_r : 'B -> ('A \/ 'B)
+
+Prop or_commut : 'A \/ 'B -> 'B \/ 'A
+Proof :
+  [ x : 'A \/ 'B ] => (((case or_r) or_l) x)

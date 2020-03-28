@@ -9,22 +9,30 @@ type entity =
 let named_prop a b = (a, b)
 
 let parse_type =
-  let rec atom_type inp =
-    inp --> (t_atom <$> stringlitu <|> parenthesized '(' ~~ptype ')')
+  let rec ptype inp =
+    inp --> (~~pimpl <|> ~~por)
 
-  and arrow_type inp =
-    inp --> (t_arrow <$> ~~atom_type <*> (spaced arrow) *> ~~ptype)
+  and pimpl inp =
+    inp --> (t_arrow <$> ~~por <*> (spaced arrow) *> ~~ptype)
 
-  and ptype inp =
-    inp --> (~~arrow_type <|> ~~atom_type)
-  in ~~ptype
+  and por inp =
+    inp --> ((t_or <$> ~~pand <*> spaced (char '\\' *> char '/') *> ~~por) <|> ~~pand)
 
+  and pand inp =
+    inp --> ((t_and <$> ~~patom <*> spaced (char '/' *> char '\\') *> ~~pand) <|> ~~patom)
+
+  and patom inp =
+    inp --> ((t_atom <$> stringlitu) <|> (t_gen <$> char '\'' *> stringlitu) <|> (parenthesized '(' ~~ptype ')'))
+  in
+  ~~ptype
 
 let parse_prop_stmt =
   named_prop <$> literal "Prop" *> (spaced stringlitl) <*> spaced (char ':') *> parse_type
   |> trimed
 
 let parse_bind = bind <$> stringlitl <*> spaced (char ':') *> parse_type
+
+let parse_comment = trimed (many (trimed (char '/' *> char '/' *> many (check ((<>) '\n')) *> char '\n')))
 
 (* 
   term ::=
@@ -57,7 +65,8 @@ let parse_axiom =
   |> trimed
 
 let parse_script =
-  many ((target <$> parse_prop_stmt <*> blanks *> parse_proof_stmt) <|> parse_axiom)
+  let entity = (target <$> parse_prop_stmt <*> blanks *> parse_proof_stmt) <|> parse_axiom in
+  many ((parse_comment *> entity) <|> entity)
 
 
 let read_all f =

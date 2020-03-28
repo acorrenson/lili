@@ -11,6 +11,7 @@ type error =
   | Bad_type of ptype
   | Not_typable
   | Overwrite
+  | Unification
 
 val type_check : term -> type_env -> ptype option
 (** Perform type checking 

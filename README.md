@@ -5,18 +5,23 @@ I made this project to discover **type theory** and the wonderful world of forma
 
 ## What can we do (for now) with Lili ?
 
-The current implementation of Lili consist of a tiny **type checker** capable of verifying proofs of propositions expressed in a logical system similar to *minimal logic*. Such proofs are expressed as explicitly typed lambda-terms in a minimalist meta-language inspired by Coq and OCaml notations.
+The current implementation of Lili consist of a tiny **type checker** capable of verifying proofs of propositions expressed in a simple logical system. Such proofs are expressed as explicitly typed lambda-terms in a minimalist meta-language inspired by Coq and OCaml notations.
 
-### Lili logic's syntax
+### Lili's logic syntax
 
 ```
+propname ::= [A..Z _]+
+
 proposition ::=
-  | [A..Z _]+
+  | <propname>
+  | '<propname>
   | <proposition> -> <proposition>
+  | <proposition> /\ <proposition>
+  | <proposition> \/ <proposition>
   | ( <proposition> )
 ```
 
-### Lili meta-language syntax
+### Lili's meta-language syntax
 
 ```
 ident ::= [a..z _]+
@@ -29,53 +34,64 @@ prop_statement ::= <prop_declaration> <prop_proof>
 
 prop_declaration ::= Prop <ident> : <proposition>
 
-prop_proof ::= Proof : proof_term
+prop_proof ::= Proof : term
 
-proof_term ::=
+term ::=
   | <ident>
-  | [ <ident> : <type_annotation> ] => term
-  | (term term)
+  | [ <ident> : <type_annotation> ] => <term>
+  | (<term> <term>)
 ```
+
+### More on Lili's logic
+
+The Logic of Lili can be described by 6 axioms :
+
+| axiom | type                                            |
+| :---: | :---------------------------------------------- |
+|  fst  | 'A /\ 'B -> 'A                                  |
+|  snd  | 'A /\ 'B -> 'B                                  |
+|  and  | 'A -> 'B -> 'A /\ 'B                            |
+| case  | ('A \\/ 'P) -> ('B \\/ 'P) -> ('A \\/ 'B -> 'P) |
+| or_l  | 'A -> ('A \\/ 'B)                               |
+| or_r  | 'B -> ('A \\/ 'B)                               |
+
+These axioms can be used directly inside proofs.
 
 ## A detailed example
 
-We introduce a small detailed example to demonstrate how to use Lili.
-Let's suppose we want to proof the tautology `(A -> B) -> (A -> B)`.
-First, we declare a new proposition :
+Let's consider the following example to demonstrate how to use Lili.
 
 ```coq
-Prop a_tautology : (A -> B) -> (A -> B)
+Axiom fst : 'A /\ 'B -> 'A
+Axiom snd : 'A /\ 'B -> 'B
+Axiom and : 'A -> 'B -> ('A /\ 'B)
+
+Prop and_commut : 'A /\ 'B -> 'B /\ 'A
+Proof:
+  [ x : 'A /\ 'B ] => ((and (snd x)) (fst x))
 ```
 
-Then we provide a proof
+The 3 first lines are axioms declarations. We assume 3 things :
++ For all propositions A and B, if we know that `A /\ B` is true, then `A` is necessarily true.
++ For all propositions A and B, if we know that `A /\ B` is true, then `B` is necessarily true.
++ For all propositions A and B, if we know that `A` is true and `B` is true, then `A /\ B` is necessarily true.
+
+Provided such axioms, we now proof that `A /\ B -> B /\ A` for all propositions A and B. The proof is written as an explicitly typed functional program whose type annotations correspond to the proposition we want to prove.
 
 ```coq
-Proof :
-  [ x : A -> B ] => [ y : A ] => (x y)
-```
-*This proof simply says that if I know `A -> B`, then if y know `A`, i can deduce `B` by a trivial application of **modus ponens***
-
-Users can also define axioms and use them inside proofs.
-
-```coq
-(* We assume that A stands *)
-Axiom axiom_a : A
-(* We assume that A implies B *)
-Axiom axiom_a_impl_b : A -> B
-
-(* We prove B *)
-Prop b_is_true : B
-Proof: (axiom_a_impl_b axiom_a)
+[ x : 'A /\ 'B ] => ((and (snd x)) (fst x))
 ```
 
+This piece of code is to be read as a function which map any proof `x` of the proposition `A /\ B` to a proof of `B /\ A`, obtained by combining the functions (proofs) `fst`, `snd` and `and`.
 
+A more complete example can be found [here](./examples/logic_prop.lili)
 
+## TODOS
 
+The current implementation of Lili lacks of many things
 
-## Work in progress
-
-The current state of Lili may appear a little bit disappointing : we can only manipulate tautologies, there is no way to define theorems and combine them etc... Of course such features are soon to come ! I currently work on many interesting ones :
-
-+ A clean **unification algorithm** to introduce universal quantifiers and generic propositions
-+ A **type inference** algorithm (thus, explicitly typed lambda-term will not be required anymore)
-+ An **interactive interface** to build proofs without explicitly writing terms but only by calling inference rules in sequence.
++ [x] Unification and meta properties
++ [ ] A more expressive logic (we do not have TOP nor BOTTOM, seriously ?)
++ [ ] Type inference (no need to explicitly type lambda terms)
++ [ ] A command line interface
++ [ ] A GUI

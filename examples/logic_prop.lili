@@ -1,0 +1,41 @@
+// =============================
+// Propositionnal logic in Lili
+// -----------------------------
+// Arthur Correnson
+// =============================
+
+// [1] We first introduce our axioms
+// ---------------------------------
+
+// [1.1] Axioms associated to the logical conjunction
+
+// For all propositions A and B, if i know A, then if i know B, i know A and B
+Axiom _and : 'A -> 'B -> 'A /\ 'B
+
+// For all propositions A and B, if i know 'A /\ 'B, in particular i know 'A
+Axiom _fst : 'A -> 'B -> 'A /\ 'B
+
+// For all propositions A and B, if i know 'A /\ 'B, in particular i know 'B
+Axiom _snd : 'A -> 'B -> 'A /\ 'B
+
+// [1.2] Axioms associated to the logical disjunction
+
+// Forall propositions A, B and P, if i can deduce P from both A and B then i can deduce P from A or B
+Axiom _case : ('A -> 'P) -> ('B -> 'P) -> ('A \/ 'B -> 'P)
+
+// Forall propositions A and B, if i know A, then i know A or B
+Axiom _or_left : 'A -> 'A \/ 'B
+
+// Forall propositions A and B, if i know B, then i know A or B
+Axiom _or_right : 'B -> 'A \/ 'B
+
+// [2] Let's proof two simple properties
+// -------------------------------------------
+
+Prop and_commut : 'A /\ 'B -> 'B /\ 'A
+Proof :
+  [ x : 'A /\ 'B ] => ((_and (fst x)) (snd x))
+
+Prop or_commut : 'A \/ 'B -> 'B \/ 'A
+Proof :
+  [ x : 'A \/ 'B ] => (((_case _or_right) _or_left) x)

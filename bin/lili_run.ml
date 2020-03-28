@@ -9,12 +9,13 @@ let cy = "\x1B[33m"
 let cn = "\x1B[0m"
 
 let process_entity env e =
+  Printf.printf "%s\n" (String.make 60 '-');
   match e with
   | Axiom (name, ax) ->
     begin
       match extend_by_axiom name ax env with
       | Ok env' -> 
-        Printf.printf "assuming : %s%s%s\n" cy (pretty_type ax) cn;
+        Printf.printf "assuming %s%s%s : %s%s%s\n" cg name cn cy (pretty_type ax) cn;
         env'
       | Error err ->
         match err with
@@ -24,7 +25,7 @@ let process_entity env e =
         | _ -> assert false
     end
   | Target ((name, target), proof) ->
-    Printf.printf "New target : [%s] %s%s%s\n" name cy (pretty_type target) cn;
+    Printf.printf "New target %s%s%s : %s%s%s\n" cg name cn cy (pretty_type target) cn;
     Printf.printf "Proof :\n%s%s%s\n" cy (pretty_term proof) cn;
     match extend_env name target proof env with
     | Ok env' ->
@@ -42,13 +43,13 @@ let process_entity env e =
       | Unification ->
         Printf.printf "error : proof and target %sare'nt unifiable%s\n" cr cn;
         exit 3
+
       | Overwrite ->
         Printf.printf "error : Overwriting statement %s%s%s\n" cr name cn;
         exit 4
 
-
 let () =
-  let pres = read_all (open_in "./examples/test_or.lili") |> do_parse parse_script in
+  let pres = read_all (open_in Sys.argv.(1)) |> do_parse parse_script in
   match pres with
   | None -> failwith "Parse error"
   | Some elist -> ignore (List.fold_left process_entity new_env elist)

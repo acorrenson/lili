@@ -65,8 +65,8 @@ let pretty_term t =
     @param t  A value of type {!term} *)
 let rec pretty_term_inline t =
   match t with
-  | Lam (Bind (x, tx), t') ->
-    Printf.sprintf "λ%s:(%s).%s" x (pretty_type tx) (pretty_term_inline t')
+  | Lam (Bind (x, _), t') ->
+    Printf.sprintf "λ%s.%s" x (pretty_term_inline t')
   | App (Var s, b) -> Printf.sprintf "(%s %s)" s (pretty_term_inline b)
   | App (a, b) ->
     Printf.sprintf "(%s %s)" (pretty_term_inline a) (pretty_term_inline b)

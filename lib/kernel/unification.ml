@@ -1,15 +1,3 @@
-module Ids : sig
-  type gen
-  type cst
-  val gen : string -> gen
-  val cst : string -> cst
-end = struct
-  type gen = string
-  type cst = string
-  let gen s = s
-  let cst s = s
-end
-
 open Term
 
 let rec occurs tvar tterm =
@@ -33,7 +21,6 @@ let (%) (f : ptype -> ptype) (g : ptype -> ptype) = fun x -> f (g x)
 let apply mgu = List.map (fun (x, y) -> (mgu x, mgu y))
 
 type error = Cycling | Clash
-(* type unification_result = ((int * ptype) list, error) result *)
 
 let (let*) x f =
   match x with
@@ -58,9 +45,6 @@ and unify consl =
   match consl with
   | [] -> Ok (Fun.id)
   | (x, y)::rest ->
-    (* let* u2 = unify rest in
-       let* u1 = unify_one (apply u2 x) (apply u2 y) in
-       Ok (u1 @ u2) *)
     let* mgu1 = unify_one x y in
     let* mgu2 = (unify (apply mgu1 rest))  in
     Ok (mgu2 % mgu1)
@@ -75,7 +59,7 @@ let rec fv t =
   | T_gen x -> VarSet.add x (VarSet.empty)
   | _ -> VarSet.empty
 
-let pretty_unifier u t =
-  let l = VarSet.map (fun x -> Printf.sprintf " ('%s <- %s) " x (pretty_type (u (T_gen x)))) (fv t) in
+let pretty_unifier u t1 t2 =
+  let f = VarSet.union (fv t1) (fv t2) in
+  let l = VarSet.map (fun x -> Printf.sprintf " ('%s <- %s) " x (pretty_type (u (T_gen x)))) f in
   VarSet.fold (^) l ""
-

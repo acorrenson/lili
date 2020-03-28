@@ -1,7 +1,7 @@
 
-Axiom fst : A /\ B -> A
-Axiom snd : A /\ B -> B
-Axiom and : B -> A -> B /\ A
+Axiom fst : 'A /\ 'B -> 'A
+Axiom snd : 'A /\ 'B -> 'B
+Axiom and : 'P -> 'Q -> 'P /\ 'Q
 
 Prop and_commut : A /\ B -> B /\ A
 Proof :

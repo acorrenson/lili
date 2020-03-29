@@ -1,8 +1,8 @@
 
-Axiom case : ('A -> 'P) -> ('B -> 'P) -> ('A \/ 'B -> 'P)
-Axiom or_l : 'A -> ('A \/ 'B)
-Axiom or_r : 'B -> ('A \/ 'B)
+Axiom mcase : ('A -> 'P) -> ('B -> 'P) -> ('A \/ 'B -> 'P)
+Axiom mor_l : 'A -> ('A \/ 'B)
+Axiom mor_r : 'B -> ('A \/ 'B)
 
-Prop or_commut : 'A \/ 'B -> 'B \/ 'A
+Prop or_commut : A \/ B -> B \/ A
 Proof :
-  [ x : 'A \/ 'B ] => (((case or_r) or_l) x)
+  [ x : 'A \/ 'B ] => (((mcase mor_r) mor_l) x)

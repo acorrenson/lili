@@ -49,17 +49,8 @@ and unify consl =
     let* mgu2 = (unify (apply mgu1 rest))  in
     Ok (mgu2 % mgu1)
 
-module VarSet = Set.Make(String)
-
-let rec fv t =
-  match t with
-  | T_arrow (a, b)
-  | T_and (a, b)
-  | T_or (a, b) -> VarSet.union (fv a) (fv b)
-  | T_gen x -> VarSet.add x (VarSet.empty)
-  | _ -> VarSet.empty
 
 let pretty_unifier u t1 t2 =
   let f = VarSet.union (fv t1) (fv t2) in
-  let l = VarSet.map (fun x -> Printf.sprintf " ('%s <- %s) " x (pretty_type (u (T_gen x)))) f in
+  let l = VarSet.map (fun x -> Printf.sprintf "'%s <- %s ; " x (pretty_type (u (T_gen x)))) f in
   VarSet.fold (^) l ""

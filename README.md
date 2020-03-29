@@ -46,14 +46,14 @@ term ::=
 
 The Logic of Lili can be described by 6 axioms :
 
-| axiom | type                                            |
-| :---: | :---------------------------------------------- |
-|  fst  | 'A /\ 'B -> 'A                                  |
-|  snd  | 'A /\ 'B -> 'B                                  |
-|  and  | 'A -> 'B -> 'A /\ 'B                            |
+| axiom | type                                          |
+| :---: | :-------------------------------------------- |
+|  fst  | 'A /\ 'B -> 'A                                |
+|  snd  | 'A /\ 'B -> 'B                                |
+|  and  | 'A -> 'B -> 'A /\ 'B                          |
 | case  | ('A -> 'P) -> ('B -> 'P) -> ('A \\/ 'B -> 'P) |
-| or_l  | 'A -> ('A \\/ 'B)                               |
-| or_r  | 'B -> ('A \\/ 'B)                               |
+| or_l  | 'A -> ('A \\/ 'B)                             |
+| or_r  | 'B -> ('A \\/ 'B)                             |
 
 These axioms can be used directly inside proofs.
 

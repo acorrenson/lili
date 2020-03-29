@@ -1,4 +1,4 @@
 
-Prop tivial : A -> B -> A
+Prop tivial : 'A -> 'B -> 'A
 Proof:
   [ x : 'C ] => [ y : 'D ] => x

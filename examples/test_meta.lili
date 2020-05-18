@@ -1,4 +1,6 @@
 
-Prop tivial : 'A -> 'B -> 'A
+Axiom fail : A -> B
+
+Prop test : 'A -> B
 Proof:
-  [ x : 'C ] => [ y : 'D ] => x
+  [ x : 'A ] => (fail x)

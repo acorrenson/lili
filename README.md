@@ -5,7 +5,7 @@ I made this project to discover **type theory** and the wonderful world of forma
 
 ## What can we do (for now) with Lili ?
 
-The current implementation of Lili consist of a tiny **type checker** capable of verifying proofs of propositions expressed in a simple logical system. Such proofs are expressed as explicitly typed lambda-terms in a minimalist meta-language inspired by Coq and OCaml notations.
+The current implementation of Lili consist of a tiny **type checker** capable of verifying proofs in a subset of the propositional logic. Such proofs are expressed as explicitly typed lambda-terms in a minimalist language inspired by Coq and OCaml notations.
 
 ### Lili's logic syntax
 
@@ -21,7 +21,7 @@ proposition ::=
   | ( <proposition> )
 ```
 
-### Lili's meta-language syntax
+### Lili's language syntax
 
 ```
 ident ::= [a..z _]+
@@ -55,7 +55,7 @@ The Logic of Lili can be described by 6 axioms :
 | or_l  | 'A -> ('A \\/ 'B)                             |
 | or_r  | 'B -> ('A \\/ 'B)                             |
 
-These axioms can be used directly inside proofs.
+These axioms are available as terms and can be used at any time inside proofs.
 
 ## A detailed example
 
@@ -90,8 +90,11 @@ A more complete example can be found [here](./examples/logic_prop.lili)
 
 The current implementation of Lili lacks of many things
 
-+ [x] Unification and meta properties
-+ [ ] A more expressive logic (we do not have TOP nor BOTTOM, seriously ?)
++ [x] Unification to express properties over universally quantified propositions.
++ [ ] A more expressive & complete logic (we do not have TOP nor BOTTOM, seriously ?)
 + [ ] Type inference (no need to explicitly type lambda terms)
 + [ ] A command line interface
-+ [ ] A GUI
+
+## Others
+
+[Oratio](https://github.com/jdrprod/Oratio) is another similar project I work on. Have a look, there are interesting things going there ;).
